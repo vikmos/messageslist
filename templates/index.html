@@ -1,0 +1,45 @@
+<html>
+    <head>
+        <title>Message list</title>
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+    </head>
+    <body>
+        <div class="ui container">
+            <h2>Сервис вывод списка сообщений на страницу без перезагрузки</h2>
+            <form action="" onsubmit="sendMessage(event)" class="ui form">
+                <div class="field">
+                    <h4>Введите сообщение:</h4>
+                    <input type="text" id="messageText" autocomplete="off">
+                </div>
+                <button>Отправить</button>
+                </form>
+                <div class="ui divider"></div>
+                <ol id="messages"></ol>
+                <script>
+                    var ws = new WebSocket("ws://localhost:8000/ws");
+                    ws.onmessage = function(event) {
+                        var messages = document.getElementById("messages")
+                        var message = document.createElement('li')
+                        var msg_text = JSON.parse(event.data)
+                        var content = document.createTextNode(msg_text)
+                        message.appendChild(content)
+                        messages.appendChild(message)
+                    };
+                    function sendMessage(event) {
+                        var input = document.getElementById("messageText")
+                        if (input.value.length == 0) {
+                            alert("Введено пустое сообщение страница будет перезагружена")
+                            location.reload()
+                        } else {
+                            var json = JSON.stringify(input.value)
+                            ws.send(json)
+                            input.value = ''
+                            event.preventDefault()
+                        }
+                    }
+                </script>
+        </div>
+    </body>
+</html>
