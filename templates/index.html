@@ -16,16 +16,18 @@
                 <button>Отправить</button>
                 </form>
                 <div class="ui divider"></div>
-                <ol id="messages"></ol>
+                <div id="messages"></div>
                 <script>
                     var ws = new WebSocket("ws://localhost:8000/ws");
                     ws.onmessage = function(event) {
                         var messages = document.getElementById("messages")
-                        var message = document.createElement('li')
+                        var message = document.createElement('label')
+                        var br = document.createElement('br')
                         var msg_text = JSON.parse(event.data)
                         var content = document.createTextNode(msg_text)
                         message.appendChild(content)
                         messages.appendChild(message)
+                        messages.appendChild(br)
                     };
                     function sendMessage(event) {
                         var input = document.getElementById("messageText")
