@@ -1,3 +1,4 @@
+import json
 from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect
 from fastapi.templating import Jinja2Templates
 
@@ -18,8 +19,11 @@ async def websocket_endpoint(websocket: WebSocket):
     """Функция получает и отправляет данные через веб-сокет соединение"""
     await websocket.accept()
     try:
+        count = 1
         while True:
             data = await websocket.receive_json()
-            await websocket.send_json(data)
+            response_data = (f'{count}. {data}')
+            await websocket.send_json(response_data)
+            count += 1
     except WebSocketDisconnect:
         print(f"\033[33mWARNING\033[37m:  \033[33mThe user reload or close the page")
