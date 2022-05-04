@@ -23,8 +23,10 @@
                         var messages = document.getElementById("messages")
                         var message = document.createElement('label')
                         var br = document.createElement('br')
-                        var msg_text = JSON.parse(event.data)
-                        var content = document.createTextNode(msg_text)
+                        var msg_obj = JSON.parse(event.data)
+                        var keys = Object.values(msg_obj)
+                        result = keys[0]+ ". " + keys[1]
+                        var content = document.createTextNode(result)
                         message.appendChild(content)
                         messages.appendChild(message)
                         messages.appendChild(br)

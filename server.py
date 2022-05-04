@@ -19,10 +19,14 @@ async def websocket_endpoint(websocket: WebSocket):
     """Функция получает и отправляет данные через веб-сокет соединение"""
     await websocket.accept()
     try:
+        response_data = {
+                'number' : 0,
+                'message': ''}
         count = 1
         while True:
             data = await websocket.receive_json()
-            response_data = (f'{count}. {data}')
+            response_data['number'] = count
+            response_data['message'] = data
             await websocket.send_json(response_data)
             count += 1
     except WebSocketDisconnect:
